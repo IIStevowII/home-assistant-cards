@@ -1,0 +1,151 @@
+type: custom:vertical-stack-in-card
+cards:
+  - type: picture
+    image: https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/2020_Volkswagen_ID.4_Pro_%28Netherlands%29_front_view.jpg/1920px-2020_Volkswagen_ID.4_Pro_%28Netherlands%29_front_view.jpg
+  - type: custom:text-divider-row
+    text: Status
+  - type: entity-filter
+    state_filter:
+      - operator: '!='
+        value: 'off'
+    entities:
+      - type: custom:multiple-entity-row
+        entity: binary_sensor.car_id4_car_is_active
+        name: Onderweg
+        icon: mdi:car
+        state_color: true
+        show_state: false
+        secondary_info:
+          entity: sensor.car_id4_remaining_climatisation_time
+          name: Klimatisering gereed over
+          hide_if: 0
+        entities:
+          - entity: binary_sensor.car_id4_insufficient_battery_level_warning
+            name: Batterijn kritiek
+            icon: mdi:car-battery
+            state_color: true
+            hide_if: 'off'
+          - entity: binary_sensor.car_id4_car_is_online
+            name: Verbinding offline
+            icon: mdi:car-wireless
+            hide_if: 'on'
+          - entity: sensor.car_id4_target_temperature_c
+            name: Temperatuur
+      - type: custom:multiple-entity-row
+        entity: binary_sensor.car_id4_car_is_active
+        name: Geparkeerd
+        icon: mdi:parking
+        show_state: false
+        secondary_info:
+          entity: sensor.car_id4_remaining_climatisation_time
+          name: Klimatisering gereed over
+          hide_if: 0
+        entities:
+          - entity: binary_sensor.car_id4_insufficient_battery_level_warning
+            name: Batterij kritiek
+            icon: mdi:car-battery
+            state_color: true
+            hide_if: 'off'
+          - entity: binary_sensor.car_id4_car_is_online
+            name: Verbinding offline
+            icon: mdi:car-wireless
+            hide_if: 'on'
+          - entity: sensor.car_id4_target_temperature_c
+            name: Temperatuur
+        state_filter:
+          - operator: '=='
+            value: 'off'
+      - entity: button.car_id4_start_climate
+        name: Start klimatisering
+      - entity: number.car_id4_target_climate_temperature
+        name: Klimatisering
+        icon: mdi:thermometer
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        name: Batterij
+        entity: sensor.car_id4_state_of_charge
+      - type: gauge
+        name: Bereik
+        entity: sensor.car_id4_range_in_kilometers
+        max: 400
+  - type: custom:text-divider-row
+    text: Laden
+  - type: entity-filter
+    state_filter:
+      - operator: '!='
+        value: 'off'
+    entities:
+      - type: custom:multiple-entity-row
+        entity: sensor.car_id4_charging_state
+        name: Gereed om te laden
+        show_state: false
+        secondary_info:
+          entity: sensor.car_id4_charging_state
+          name: false
+          unit: during charging
+          hide_if:
+            - charging
+            - readyForCharging
+          hide_unavailable: true
+        entities:
+          - entity: binary_sensor.car_id4_plug_connection_state
+            name: Laadkabel
+          - entity: binary_sensor.car_id4_plug_lock_state
+            name: Laadpoort
+          - entity: sensor.car_id4_max_charge_current_ac
+            name: false
+            icon: mdi:battery-charging-low
+            hide_if: maximum
+            hide_unavailable: true
+        state_filter:
+          - operator: '!='
+            value: charging
+      - type: custom:multiple-entity-row
+        entity: sensor.car_id4_charging_state
+        name: Bezig met opladen
+        show_state: false
+        entities:
+          - entity: binary_sensor.car_id4_plug_connection_state
+            name: Laadkabel
+          - entity: binary_sensor.car_id4_plug_lock_state
+            name: Laadpoort
+          - entity: sensor.car_id4_max_charge_current_ac
+            name: false
+            icon: mdi:battery-charging-low
+            hide_if: maximum
+            hide_unavailable: true
+          - entity: sensor.car_id4_charge_type
+            name: false
+            icon: mdi:battery-charging-high
+            hide_if: ac
+            hide_unavailable: true
+        state_filter:
+          - operator: '=='
+            value: charging
+      - type: custom:multiple-entity-row
+        entity: sensor.car_id4_target_state_of_charge
+        name: Gewenst laaddoel
+        icon: mdi:battery-charging-high
+        secondary_info:
+          entity: sensor.car_id4_remaining_charging_time
+          name: false
+          unit: min resterend
+          hide_if: maximum
+          hide_unavailable: true
+      - entity: button.car_id4_toggle_ac_charge_speed
+        name: Langzaam laden
+      - entity: number.car_id4_target_state_of_charge
+        name: Laaddoel
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        entity: sensor.car_id4_charge_power
+        name: Laadsnelheid
+        unit: kWh
+        max: 135
+      - type: gauge
+        entity: sensor.car_id4_charge_rate
+        name: Laadbereik
+        unit: km/u
+        max: 500
