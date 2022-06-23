@@ -142,7 +142,7 @@ cards:
       - type: gauge
         entity: sensor.car_id4_charge_power
         name: Laadsnelheid
-        unit: kWh
+        unit: kW
         max: 135
       - type: gauge
         entity: sensor.car_id4_charge_rate
